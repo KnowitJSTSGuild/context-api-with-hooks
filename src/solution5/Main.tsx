@@ -4,8 +4,6 @@ import {
   useNameContext,
   useAgeContext,
   useSavedValuesContext,
-  useGetSavedValues,
-  useGetSavedValue,
 } from "./context"
 
 const NameInput: React.FC = () => {
@@ -44,7 +42,7 @@ const NameInput: React.FC = () => {
 
 const AgeInput: React.FC = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const { ageState, setAge, age } = useAgeContext();
+  const { setAge, age } = useAgeContext();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAge(Number(e.target.value));
@@ -79,7 +77,8 @@ const SaveButton: React.FC = () => {
 }
 
 const Value: React.FC<{ valueKey: string }> = ({ valueKey }) => {
-  const savedValue = useGetSavedValue(valueKey);
+  const { getSavedValue } = useSavedValuesContext();
+  const savedValue = getSavedValue(valueKey)
 
   React.useEffect(() => {
     console.log("Saved value was changed: ", valueKey, savedValue)
@@ -91,7 +90,7 @@ const Value: React.FC<{ valueKey: string }> = ({ valueKey }) => {
 }
 
 const ValueOutput: React.FC = () => {
-  const { savedValues } = useGetSavedValues();
+  const { savedValues } = useSavedValuesContext();
 
   React.useEffect(() => {
     console.log("Saved values was changed: ", savedValues);

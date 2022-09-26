@@ -15,4 +15,4 @@ Set all of the state logic inside a single hook (one for each context), where th
 Use callbacks instead of switch statement for modifying the state. Also modify the contexts' state so that it can't be mutated without calling the reducer.
 
 ## Bonus task:
-Add lastName to the NameContext and use the new useSyncExternalStore hook to make sure that only values that were updated cause re-renders in the components that use them. Note that this is not really designed to go with the useReducer and useContext hooks, but with some creative use they can be made to comply. Also note that for the SavedValuesContext freezing and reassigning the whole state might not work correctly, if you figure out how please share.
+Combine all of the contexts under one Provider, use separate hooks for different parts of the store. Use the new useSyncExternalStore to access the store values to avoid unnecessary re-renders (you can copy the store.tsx from solution5 folder to get started, or use your own implementation).
