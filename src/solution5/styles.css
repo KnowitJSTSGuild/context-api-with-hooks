@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+
+:root {
+  --background-color: hsl(261, 100%, 4%);
+  --background-color-inverted: hsl(81, 100%, 96%);
+  --background-color-light: hsl(261, 100%, 7%);
+  --primary-color: hsl(261, 100%, 30%);
+  --primary-color-faded: hsla(261, 100%, 30%, 0.8);
+  --secondary-color: hsl(30, 100%, 47%);
+  --secondary-color-faded: hsla(30, 100%, 47%, 0.08);
+  --secondary-color-inverted: hsl(210, 100%, 53%);
+}
+
+body {
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Lato", "Arial", "Helvetica", sans-serif;
+  line-height: 1.5em;
+  letter-spacing: 0.05em;
+  word-spacing: 0.07em;
+  word-break: break-word;
+}
+
+*:focus {
+  outline: none;
+  box-shadow: 0 0 7px 0 var(--secondary-color-inverted);
+}
+
+button:not(:disabled) {
+  cursor: pointer;
+  background-color: var(--background-color);
+  border-radius: 1rem;
+  border: 1px solid var(--secondary-color);
+  color: #fff;
+  padding: 0.3rem 1.5rem;
+}
+
+button {
+  transition: color 0.2s ease-in-out, padding 0.2s ease-in-out,
+    border-radius 0.2s ease-in-out;
+}
+
+button:hover {
+  filter: invert(0.05);
+}
+
+main {
+  min-height: 100vh;
+  background: radial-gradient(
+      farthest-corner at 3rem 3rem,
+      transparent 80%,
+      var(--secondary-color-faded) 100%
+    ),
+    radial-gradient(
+      farthest-side at 2rem 2rem,
+      var(--secondary-color-faded) 1%,
+      transparent 90%
+    ),
+    var(--background-color);
+  display: flex;
+  flex-direction: column;
+}
+
+p,
+input,
+span,
+label,
+button {
+  font-size: 1.1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+th,
+td {
+  color: var(--secondary-color);
+}
+
+th {
+  border-bottom: 1px solid var(--secondary-color);
+}
+
+tr:nth-child(2) > td {
+  padding-top: 5px;
+}
+
+td {
+  padding-left: 5px;
+  padding-right: 5px;
+  animation: td_appear 0.2s ease-in-out forwards;
+}
+
+@keyframes td_appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+label {
+  color: var(--secondary-color);
+  margin-left: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+input {
+  padding: 0.2rem 0.5rem;
+  margin-bottom: 1rem;
+  background-color: var(--background-color-inverted);
+  filter: invert(1);
+  border-radius: 1rem;
+  border: 1px solid var(--secondary-color-inverted);
+  color: #000;
+}
+
+.inputs {
+  margin: auto auto 1rem auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.output {
+  margin: 1rem auto auto auto;
+}
+
+.inputs,
+.output {
+  background-color: var(--background-color-light);
+  min-width: 320px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 2rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 2rem;
+}

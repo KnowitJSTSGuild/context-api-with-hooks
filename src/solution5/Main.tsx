@@ -1,10 +1,28 @@
 import React from "react";
+import "./styles.css";
 import {
   StateProvider,
   useNameContext,
   useAgeContext,
   useSavedValuesContext,
 } from "./context"
+
+interface InputProps {
+  type: "text" | "number";
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  defaultValue?: string | number;
+  id: string;
+  labelText: string;
+}
+
+const Input = React.forwardRef<HTMLInputElement, InputProps>(({ type, onChange, defaultValue, id, labelText }, ref) => {
+  return (
+    <>
+      <label htmlFor={id}>{labelText}</label>
+      <input id={id} ref={ref} type={type} onChange={onChange} defaultValue={defaultValue} />
+    </>
+  )
+});
 
 const NameInput: React.FC = () => {
   const nameInputRef = React.useRef<HTMLInputElement>(null);
@@ -34,8 +52,8 @@ const NameInput: React.FC = () => {
 
   return (
     <>
-      <input ref={nameInputRef} type="text" defaultValue={name} placeholder="Name" onChange={onNameChange} />
-      <input ref={lastNameInputRef} type="text" defaultValue={lastName} placeholder="Last name" onChange={onLastNameChange} />
+      <Input id="name_input" ref={nameInputRef} type="text" defaultValue={name} labelText="Name" onChange={onNameChange} />
+      <Input id="last_name_input" ref={lastNameInputRef} type="text" defaultValue={lastName} labelText="Last name" onChange={onLastNameChange} />
     </>
   );
 }
@@ -57,7 +75,7 @@ const AgeInput: React.FC = () => {
   }, [age]);
 
   return (
-    <input ref={inputRef} type="number" defaultValue={age} placeholder="Age" onChange={onChange} />
+    <Input id="age_input" ref={inputRef} type="number" defaultValue={age} labelText="Age" onChange={onChange} />
   )
 }
 
@@ -78,14 +96,18 @@ const SaveButton: React.FC = () => {
 
 const Value: React.FC<{ valueKey: string }> = ({ valueKey }) => {
   const { getSavedValue } = useSavedValuesContext();
-  const savedValue = getSavedValue(valueKey)
+  const savedValue = getSavedValue(valueKey);
 
   React.useEffect(() => {
     console.log("Saved value was changed: ", valueKey, savedValue)
   }, [savedValue]);
 
   return (
-    <p>{valueKey + ': ' + JSON.stringify(savedValue)}</p>
+    <tr>
+      <td>{savedValue.name}</td>
+      <td>{savedValue.lastName}</td>
+      <td>{savedValue.age}</td>
+    </tr>
   );
 }
 
@@ -97,9 +119,27 @@ const ValueOutput: React.FC = () => {
   }, [savedValues]);
 
   return (
-    <div>
-      <h1>Saved values:</h1>
-      {Object.keys(savedValues).map((key) => <Value key={key} valueKey={key} />)}
+    <div className="output">
+      <table>
+        <tbody>
+          <tr>
+            <th>Name</th>
+            <th>Last name</th>
+            <th>Age</th>
+          </tr>
+          {Object.keys(savedValues).map((key) => <Value key={key} valueKey={key} />)}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+const Inputs: React.FC = () => {
+  return (
+    <div className="inputs">
+      <NameInput />
+      <AgeInput />
+      <SaveButton />
     </div>
   );
 }
@@ -108,11 +148,11 @@ export const Main: React.FC = () => {
   console.log("this should fire only when initial render happens");
   // Note that the state can only be accessed inside the provider
   return (
-    <StateProvider>
-      <NameInput />
-      <AgeInput />
-      <SaveButton />
-      <ValueOutput />
-    </StateProvider>
+    <main>
+      <StateProvider>
+        <Inputs />
+        <ValueOutput />
+      </StateProvider>
+    </main>
   );
 }
