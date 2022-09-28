@@ -22,7 +22,7 @@ const initialState: IState = Object.freeze({
     savedValues: {},
 });
 
-const reducer = (state: IState, callback: TCallBack): IState => Object.freeze({ ...callback(state) });
+const reducer = (state: IState, callback: TCallBack): IState => Object.freeze(callback(state));
 
 const Context = React.createContext<{ state: IState, dispatch: React.Dispatch<TCallBack> }>({ state: initialState, dispatch: () => { } });
 
@@ -37,14 +37,13 @@ export const useStore = () => {
     }
 
     const { state, dispatch } = React.useContext(Context);
-    const inputs = React.useSyncExternalStore(
-        () => () => state.inputs,
-        React.useCallback(() => state.inputs, [state.inputs])
-    );
-    const savedValues = React.useSyncExternalStore(
-        () => () => state.savedValues,
-        React.useCallback(() => state.savedValues, [state.savedValues])
-    );
 
-    return { ContextProvider, state, dispatch, inputs, savedValues };
+    function useSelector<T>(selector: T) {
+        return React.useSyncExternalStore(
+            () => () => selector,
+            React.useCallback(() => selector, [selector])
+        );
+    }
+
+    return { ContextProvider, state, dispatch, useSelector };
 }

@@ -26,35 +26,44 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ type, onChange, 
 
 const NameInput: React.FC = () => {
   const nameInputRef = React.useRef<HTMLInputElement>(null);
-  const lastNameInputRef = React.useRef<HTMLInputElement>(null);
-  const { setName, setLastName, name, lastName } = useNameContext();
+  const { setName, name } = useNameContext();
 
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   }
+
+
+  React.useEffect(() => {
+    if (!name && nameInputRef.current) nameInputRef.current.value = "";
+  }, [name]);
+
+  React.useEffect(() => {
+    console.log("Name was changed: ", name);
+  }, [name]);
+
+  return (
+    <Input id="name_input" ref={nameInputRef} type="text" defaultValue={name} labelText="Name" onChange={onNameChange} />
+  );
+}
+
+const LastNameInput: React.FC = () => {
+  const lastNameInputRef = React.useRef<HTMLInputElement>(null);
+  const { setLastName, lastName } = useNameContext();
 
   const onLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLastName(e.target.value);
   }
 
   React.useEffect(() => {
-    if (!name && nameInputRef.current) nameInputRef.current.value = "";
     if (!lastName && lastNameInputRef.current) lastNameInputRef.current.value = "";
-  }, [name, lastName]);
-
-  React.useEffect(() => {
-    console.log("Name was changed: ", name);
-  }, [name]);
+  }, [lastName]);
 
   React.useEffect(() => {
     console.log("Last name was changed: ", lastName);
   }, [lastName]);
 
   return (
-    <>
-      <Input id="name_input" ref={nameInputRef} type="text" defaultValue={name} labelText="Name" onChange={onNameChange} />
-      <Input id="last_name_input" ref={lastNameInputRef} type="text" defaultValue={lastName} labelText="Last name" onChange={onLastNameChange} />
-    </>
+    <Input id="last_name_input" ref={lastNameInputRef} type="text" defaultValue={lastName} labelText="Last name" onChange={onLastNameChange} />
   );
 }
 
@@ -111,15 +120,20 @@ const Value: React.FC<{ valueKey: string }> = ({ valueKey }) => {
   );
 }
 
+var renderCount = 0;
+
 const ValueOutput: React.FC = () => {
   const { savedValues } = useSavedValuesContext();
+  renderCount++;
 
   React.useEffect(() => {
+    // this is very weird side effect, this does not get called again
     console.log("Saved values was changed: ", savedValues);
   }, [savedValues]);
 
   return (
     <div className="output">
+      <span style={{textAlign: "center"}}>Render count: {renderCount}</span>
       <table>
         <tbody>
           <tr>
@@ -138,6 +152,7 @@ const Inputs: React.FC = () => {
   return (
     <div className="inputs">
       <NameInput />
+      <LastNameInput />
       <AgeInput />
       <SaveButton />
     </div>
@@ -145,8 +160,6 @@ const Inputs: React.FC = () => {
 }
 
 export const Main: React.FC = () => {
-  console.log("this should fire only when initial render happens");
-  // Note that the state can only be accessed inside the provider
   return (
     <main>
       <StateProvider>
