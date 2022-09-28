@@ -24,10 +24,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(({ type, onChange, 
   )
 });
 
+var nameInputRenderCount = 0;
 const NameInput: React.FC = () => {
   const nameInputRef = React.useRef<HTMLInputElement>(null);
   const { setName, name } = useNameContext();
-
+  nameInputRenderCount++;
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   }
@@ -42,13 +43,15 @@ const NameInput: React.FC = () => {
   }, [name]);
 
   return (
-    <Input id="name_input" ref={nameInputRef} type="text" defaultValue={name} labelText="Name" onChange={onNameChange} />
+    <Input id="name_input" ref={nameInputRef} type="text" defaultValue={name} labelText={"Name " + nameInputRenderCount} onChange={onNameChange} />
   );
 }
 
+var lastNameInputRenderCount = 0;
 const LastNameInput: React.FC = () => {
   const lastNameInputRef = React.useRef<HTMLInputElement>(null);
   const { setLastName, lastName } = useNameContext();
+  lastNameInputRenderCount++;
 
   const onLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLastName(e.target.value);
@@ -63,13 +66,15 @@ const LastNameInput: React.FC = () => {
   }, [lastName]);
 
   return (
-    <Input id="last_name_input" ref={lastNameInputRef} type="text" defaultValue={lastName} labelText="Last name" onChange={onLastNameChange} />
+    <Input id="last_name_input" ref={lastNameInputRef} type="text" defaultValue={lastName} labelText={"Last name " + lastNameInputRenderCount} onChange={onLastNameChange} />
   );
 }
 
+var ageInputRenderCount = 0;
 const AgeInput: React.FC = () => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const { setAge, age } = useAgeContext();
+  ageInputRenderCount++;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAge(Number(e.target.value));
@@ -84,7 +89,7 @@ const AgeInput: React.FC = () => {
   }, [age]);
 
   return (
-    <Input id="age_input" ref={inputRef} type="number" defaultValue={age} labelText="Age" onChange={onChange} />
+    <Input id="age_input" ref={inputRef} type="number" defaultValue={age} labelText={"Age " + ageInputRenderCount} onChange={onChange} />
   )
 }
 
@@ -106,7 +111,7 @@ const SaveButton: React.FC = () => {
 const Value: React.FC<{ valueKey: string }> = ({ valueKey }) => {
   const { getSavedValue } = useSavedValuesContext();
   const savedValue = getSavedValue(valueKey);
-
+  
   React.useEffect(() => {
     console.log("Saved value was changed: ", valueKey, savedValue)
   }, [savedValue]);
@@ -120,11 +125,10 @@ const Value: React.FC<{ valueKey: string }> = ({ valueKey }) => {
   );
 }
 
-var renderCount = 0;
-
+var valueRenderCount = 0;
 const ValueOutput: React.FC = () => {
   const { savedValues } = useSavedValuesContext();
-  renderCount++;
+  valueRenderCount++;
 
   React.useEffect(() => {
     // this is very weird side effect, this does not get called again
@@ -133,7 +137,7 @@ const ValueOutput: React.FC = () => {
 
   return (
     <div className="output">
-      <span style={{textAlign: "center"}}>Render count: {renderCount}</span>
+      <span style={{ textAlign: "center" }}>Render count: {valueRenderCount}</span>
       <table>
         <tbody>
           <tr>
@@ -148,9 +152,12 @@ const ValueOutput: React.FC = () => {
   );
 }
 
+var inputsRenderCount = 0;
 const Inputs: React.FC = () => {
+  inputsRenderCount++;
   return (
     <div className="inputs">
+      <span style={{ textAlign: 'center' }}>Render count: {inputsRenderCount}</span>
       <NameInput />
       <LastNameInput />
       <AgeInput />

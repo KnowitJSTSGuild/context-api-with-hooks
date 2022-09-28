@@ -17,12 +17,12 @@ interface IState {
 
 type TCallBack = (state: IState) => IState;
 
-const initialState: IState = Object.freeze({
+const initialState: IState = {
     inputs: {},
     savedValues: {},
-});
+};
 
-const reducer = (state: IState, callback: TCallBack): IState => Object.freeze(callback(state));
+const reducer = (state: IState, callback: TCallBack): IState => Object.freeze({ ...callback(state) });
 
 const Context = React.createContext<{ state: IState, dispatch: React.Dispatch<TCallBack> }>({ state: initialState, dispatch: () => { } });
 

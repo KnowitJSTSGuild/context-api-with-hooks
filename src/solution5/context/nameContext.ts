@@ -6,13 +6,10 @@ export const useNameContext = () => {
   const lastName = useSelector(state.inputs.lastName);
 
   const setName = (name: string) => {
-    dispatch((state) => ({
-      ...state,
-      inputs: {
-        ...state.inputs,
-        name: name,
-      },
-    }));
+    dispatch((state) => {
+      state.inputs.name = name;
+      return state;
+    });
   };
 
   const resetName = () => {
