@@ -71,7 +71,6 @@ const ValueOutput: React.FC = () => {
 
 export const Main: React.FC = () => {
   console.log("this should fire only when initial render happens");
-  // Note that the state can only be accessed inside the provider
   return (
     <StateProvider>
       <ValueOutput />

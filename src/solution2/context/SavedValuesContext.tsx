@@ -22,8 +22,6 @@ export const savedValuesReducer = (state: IState, action: IAction): IState => {
       state[action.value.name] = action.value.age;
       break;
   }
-  // Need to destructure here if there are nested objects in the state, or the re-render wont fire.
-  // If no nested objects, no need to destructure.
   return { ...state };
 }
 
@@ -33,7 +31,7 @@ export const useSetSavedValue = () => {
   const { dispatch } = React.useContext(SavedValuesContext);
 
   // If this hook is called from inside the Name and Age providers, we can just call
-  // these magically inside here
+  // these from here
   const resetAge = useResetAge();
   const resetName = useResetName();
 

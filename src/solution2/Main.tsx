@@ -70,7 +70,6 @@ const ValueOutput: React.FC = () => {
 }
 
 export const Main: React.FC = () => {
-  // Note that the state can only be accessed inside the provider
   return (
     <StateProvider>
       <ValueOutput />

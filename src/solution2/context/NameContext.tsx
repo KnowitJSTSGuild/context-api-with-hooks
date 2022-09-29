@@ -20,8 +20,6 @@ export const nameReducer = (state: IState, action: IAction): IState => {
       state.name = undefined;
       break;
   }
-  // Need to destructure here if there are nested objects in the state, or the re-render wont fire.
-  // If no nested objects, no need to destructure.
   return { ...state };
 }
 
