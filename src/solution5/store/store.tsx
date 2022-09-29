@@ -17,40 +17,31 @@ interface IState {
 
 type TCallBack = (state: IState) => IState;
 
+// using static methods here due to JavaScript this shenanigans
 class Store {
-  private state: IState = {
+  private static state: IState = {
     inputs: {},
     savedValues: {},
   }
 
-  private listeners = new Set<() => void>();
+  private static listeners = new Set<() => void>();
 
-  addListener(listener: () => void) {
-    this.listeners.add(listener);
+  static subscribe(listener: () => void){
+    Store.listeners.add(listener);
+    return () => Store.listeners.delete(listener);
   }
 
-  removeListener(listener: () => void) {
-    this.listeners.delete(listener);
+  static getState() {
+    return Store.state;
   }
 
-  subscribe(listener: () => void, store: Store){
-    store.addListener(listener);
-    return () => store.removeListener(listener);
+  private static setState(state: IState) {
+    Store.state = state;
+    Store.listeners.forEach((onStoreChange) => onStoreChange());
   }
 
-  getState() {
-    return this.state;
-  }
-
-  setState(state: IState) {
-    this.state = state;
-    console.log(this.listeners);
-    this.listeners.forEach((l) => l());
-  }
-
-  dispatch(callback: TCallBack, store: Store) {
-    const state = store.getState();
-    store.setState(callback(state));
+  static dispatch(callback: TCallBack) {
+    Store.setState(callback(Store.getState()));
   }
 }
 
@@ -58,6 +49,12 @@ const Context = React.createContext(new Store());
 
 export const useStore = () => {
   const ContextProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+    /*
+    * Due to the store being static class, Context has no real use here, but 
+    * due to JavaScripts weird handling of this keyword the store would have to
+    * be passed to itself in every function call, so to save myself from completely 
+    * descending into madness, I used static methods and parameters.
+    */
     const store = new Store();
     return (
       <Context.Provider value={store}>
@@ -67,20 +64,14 @@ export const useStore = () => {
   }
 
   const store = React.useContext(Context);
-  const state = store.getState();
-  function dispatch(callback: TCallBack){
-    store.dispatch(callback, store);
-  }
+  const state = Store.getState();
   
-  function useSelector<T>(selector: T) {
+  function useSelector<T>(selector: (state: IState) => T) {
     return React.useSyncExternalStore(
-      (onStoreChange: () => void) => {
-        console.log(store.getState());
-        return store.subscribe(onStoreChange, store)
-      },
-      React.useCallback(() => selector, [store, selector])
+      Store.subscribe,
+      React.useCallback(() => selector(state), [store, selector])
     );
   }
 
-  return { ContextProvider, state, useSelector, dispatch };
+  return { ContextProvider, useSelector, dispatch: Store.dispatch };
 }

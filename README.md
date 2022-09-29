@@ -1,6 +1,6 @@
 # Global state management with Context API
 
-In this repository there are three tasks for handling global state management across different components using React's Context API. From src directory you'll find subdirectories from task1->3 and solution1->3. Ideally, you should use only task1 and follow the steps listed below to modify your own code to reach the needs of the tasks. Each of the task directories are identical to the solution for the previous task, so if you get desperate you can just use the next task directory instead. To swap from one task to another, just switch the import for Main in App.tsx to the respective tasks directory.
+In this repository there are three tasks for handling global state management across different components using React's Context API. From src directory you'll find subdirectories from task1->5 and solution1->5. Ideally, you should use only task1 and follow the steps listed below to modify your own code to reach the needs of the tasks. Each of the task directories are identical to the solution for the previous task, so if you get desperate you can just use the next task directory instead. To swap from one task to another, just switch the import for Main in App.tsx to the respective tasks directory.
 
 ## Task 1: 
 Modify code in src/task1 in a way that dispatch function has to never be called inside components, use custom hook exported from src/task1/context instead.
@@ -15,4 +15,4 @@ Set all of the state logic inside a single hook (one for each context), where th
 Use callbacks instead of switch statement for modifying the state. Also modify the contexts' state so that it can't be mutated without calling the reducer.
 
 ## Bonus task:
-Combine all of the contexts under one Provider, use separate hooks for different parts of the store. Use the new useSyncExternalStore to access the store values to avoid unnecessary re-renders (you can copy the store.tsx from solution5 folder to get started, or use your own implementation).
+Combine all of the contexts under one Provider, use separate hooks for different parts of the store. Use the new useSyncExternalStore to access the store values to avoid unnecessary re-renders (note that the store created with useReducer does not work in this case).

@@ -5,7 +5,15 @@ import {
   useNameContext,
   useAgeContext,
   useSavedValuesContext,
-} from "./store"
+} from "./store";
+
+// Just an example of cleaner implementation for Context, not meant to be used here
+// import {
+//   StateProvider,
+//   useNameContext,
+//   useAgeContext,
+//   useSavedValuesContext,
+// } from "./context";
 
 interface InputProps {
   type: "text" | "number";
@@ -111,7 +119,7 @@ const SaveButton: React.FC = () => {
 const Value: React.FC<{ valueKey: string }> = ({ valueKey }) => {
   const { getSavedValue } = useSavedValuesContext();
   const savedValue = getSavedValue(valueKey);
-  
+
   React.useEffect(() => {
     console.log("Saved value was changed: ", valueKey, savedValue)
   }, [savedValue]);
@@ -128,28 +136,29 @@ const Value: React.FC<{ valueKey: string }> = ({ valueKey }) => {
 var valueRenderCount = 0;
 const ValueOutput: React.FC = () => {
   const { savedValues } = useSavedValuesContext();
-  valueRenderCount++;
 
   React.useEffect(() => {
-    // this is very weird side effect, this does not get called again
     console.log("Saved values was changed: ", savedValues);
   }, [savedValues]);
 
-  return (
-    <div className="output">
-      <span style={{ textAlign: "center" }}>Render count: {valueRenderCount}</span>
-      <table>
-        <tbody>
-          <tr>
-            <th>Name</th>
-            <th>Last name</th>
-            <th>Age</th>
-          </tr>
-          {Object.keys(savedValues).map((key) => <Value key={key} valueKey={key} />)}
-        </tbody>
-      </table>
-    </div>
-  );
+  return React.useMemo(() => {
+    valueRenderCount++;
+    return (
+      <div className="output">
+        <span style={{ textAlign: "center" }}>Render count: {valueRenderCount}</span>
+        <table>
+          <tbody>
+            <tr>
+              <th>Name</th>
+              <th>Last name</th>
+              <th>Age</th>
+            </tr>
+            {Object.keys(savedValues).map((key) => <Value key={key} valueKey={key} />)}
+          </tbody>
+        </table>
+      </div>
+    )
+  }, [savedValues]);
 }
 
 var inputsRenderCount = 0;

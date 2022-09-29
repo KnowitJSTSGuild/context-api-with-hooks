@@ -1,9 +1,10 @@
+import React from "react";
 import { useStore } from "./store";
 
 export const useNameContext = () => {
-  const { state, dispatch, useSelector } = useStore();
-  const name = useSelector(state.inputs.name);
-  const lastName = useSelector(state.inputs.lastName);
+  const { dispatch, useSelector } = useStore();
+  const name = useSelector(React.useCallback((state) => state.inputs.name, []));
+  const lastName = useSelector(React.useCallback((state) => state.inputs.lastName, []));
 
   const setName = (name: string) => {
     dispatch((state) => {

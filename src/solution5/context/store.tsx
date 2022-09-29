@@ -38,12 +38,5 @@ export const useStore = () => {
 
     const { state, dispatch } = React.useContext(Context);
 
-    // function useSelector<T>(selector: T) {
-    //     return React.useSyncExternalStore(
-    //         () => () => selector,
-    //         React.useCallback(() => selector, [selector])
-    //     );
-    // }
-
     return { ContextProvider, state, dispatch };
 }

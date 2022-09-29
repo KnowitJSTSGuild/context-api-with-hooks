@@ -1,8 +1,9 @@
+import React from "react";
 import { useStore } from "./store";
 
 export const useAgeContext = () => {
-    const { state, dispatch, useSelector } = useStore();
-    const age = useSelector(state.inputs.age);
+    const { dispatch, useSelector } = useStore();
+    const age = useSelector(React.useCallback((state) => state.inputs.age, []));
 
     const setAge = (age: number) => {
         if (typeof age !== 'number') return;
