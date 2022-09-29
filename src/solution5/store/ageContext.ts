@@ -1,8 +1,8 @@
 import { useStore } from "./store";
 
 export const useAgeContext = () => {
-    const { state, dispatch } = useStore();
-    const age = state.inputs.age;
+    const { state, dispatch, useSelector } = useStore();
+    const age = useSelector(state.inputs.age);
 
     const setAge = (age: number) => {
         if (typeof age !== 'number') return;

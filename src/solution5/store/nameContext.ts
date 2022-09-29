@@ -1,9 +1,9 @@
 import { useStore } from "./store";
 
 export const useNameContext = () => {
-  const { state, dispatch } = useStore();
-  const name = state.inputs.name;
-  const lastName = state.inputs.lastName;
+  const { state, dispatch, useSelector } = useStore();
+  const name = useSelector(state.inputs.name);
+  const lastName = useSelector(state.inputs.lastName);
 
   const setName = (name: string) => {
     dispatch((state) => {

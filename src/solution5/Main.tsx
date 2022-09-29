@@ -5,7 +5,7 @@ import {
   useNameContext,
   useAgeContext,
   useSavedValuesContext,
-} from "./context"
+} from "./store"
 
 interface InputProps {
   type: "text" | "number";

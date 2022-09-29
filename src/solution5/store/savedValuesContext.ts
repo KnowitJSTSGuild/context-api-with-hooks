@@ -3,11 +3,11 @@ import { useAgeContext } from "./ageContext";
 import { useNameContext } from "./nameContext";
 
 export const useSavedValuesContext = () => {
-  const { state, dispatch } = useStore();
+  const { state, dispatch, useSelector } = useStore();
   const { age, resetAge } = useAgeContext();
   const { name, lastName, resetName, resetLastName } = useNameContext();
   
-  const savedValues = state.savedValues;
+  const savedValues = useSelector(state.savedValues);
 
   const setSavedValue = () => {
     if (!name || !lastName || !age) return;

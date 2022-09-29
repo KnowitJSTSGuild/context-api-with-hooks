@@ -17,10 +17,10 @@ interface IState {
 
 type TCallBack = (state: IState) => IState;
 
-const initialState: IState = {
+const initialState: IState = Object.freeze({
     inputs: {},
     savedValues: {},
-};
+});
 
 const reducer = (state: IState, callback: TCallBack): IState => Object.freeze({ ...callback(state) });
 
@@ -38,12 +38,12 @@ export const useStore = () => {
 
     const { state, dispatch } = React.useContext(Context);
 
-    function useSelector<T>(selector: T) {
-        return React.useSyncExternalStore(
-            () => () => selector,
-            React.useCallback(() => selector, [selector])
-        );
-    }
+    // function useSelector<T>(selector: T) {
+    //     return React.useSyncExternalStore(
+    //         () => () => selector,
+    //         React.useCallback(() => selector, [selector])
+    //     );
+    // }
 
-    return { ContextProvider, state, dispatch, useSelector };
+    return { ContextProvider, state, dispatch };
 }
